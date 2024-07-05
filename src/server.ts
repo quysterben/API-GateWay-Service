@@ -1,3 +1,5 @@
+import http from 'http';
+
 import { Logger } from 'winston';
 import { CustomError, IErrorResponse, winstonLogger } from '@quysterben/jobber-shared';
 import { Application, Request, urlencoded, Response, NextFunction } from 'express';
@@ -8,10 +10,10 @@ import cors from 'cors';
 import { json } from 'body-parser';
 import compression from 'compression';
 import { StatusCodes } from 'http-status-codes';
-import http from 'http';
 import { config } from '@gateway/config';
-import { elasticSearch } from './elasticsearch';
-import { appRoutes } from './routes';
+import { elasticSearch } from '@gateway/elasticsearch';
+import { appRoutes } from '@gateway/routes';
+import { axiosAuthInstance } from '@gateway/services/api/auth.service';
 
 const SERVER_PORT = 4000;
 const log: Logger = winstonLogger(`${config.ELASTIC_SEARCH_URL}`, 'apiGatewayService', 'debug');
@@ -52,6 +54,13 @@ export class GateWayServer {
         methods: ['GET', 'POST', 'PUT', 'DELETE']
       })
     );
+
+    app.use((req: Request, _res: Response, next: NextFunction) => {
+      if (req.session?.jwt) {
+        axiosAuthInstance.defaults.headers.common['Authorization'] = `Bearer ${req.session.jwt}`;
+      }
+      next();
+    });
   }
 
   private standardMiddleware(app: Application): void {
@@ -92,7 +101,7 @@ export class GateWayServer {
       const httpServer: http.Server = new http.Server(app);
       this.startHttpServer(httpServer);
     } catch (error) {
-      log.log('error', `GatewayService startServer():`, error);
+      log.log('error', 'GatewayService startServer():', error);
     }
   }
 
@@ -103,7 +112,7 @@ export class GateWayServer {
         log.info(`GatewayService listening on port ${SERVER_PORT}`);
       });
     } catch (error) {
-      log.log('error', `GatewayService startHttpServer():`, error);
+      log.log('error', 'GatewayService startHttpServer():', error);
     }
   }
 }
