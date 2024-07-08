@@ -32,42 +32,47 @@ class AuthService {
   }
 
   async singUp(body: IAuth): Promise<AxiosResponse> {
-    const response: AxiosResponse = await this.axiosService.axios.post('/signup', body);
+    const response: AxiosResponse = await axiosAuthInstance.post('/signup', body);
     return response;
   }
 
   async signIn(body: IAuth): Promise<AxiosResponse> {
-    const response: AxiosResponse = await this.axiosService.axios.post('/signin', body);
+    const response: AxiosResponse = await axiosAuthInstance.post('/signin', body);
     return response;
   }
 
   async forgotPassword(email: string): Promise<AxiosResponse> {
-    const response: AxiosResponse = await this.axiosService.axios.post('/forgot-password', { email });
+    const response: AxiosResponse = await axiosAuthInstance.post('/forgot-password', { email });
     return response;
   }
 
   async resetPassword(token: string, password: string, confirmPassword: string): Promise<AxiosResponse> {
-    const response: AxiosResponse = await this.axiosService.axios.post(`/reset-password/${token}`, { password, confirmPassword });
+    const response: AxiosResponse = await axiosAuthInstance.post(`/reset-password/${token}`, { password, confirmPassword });
     return response;
   }
 
   async resendEmail(data: { userId: number; email: string }): Promise<AxiosResponse> {
-    const response: AxiosResponse = await this.axiosService.axios.post('/resend-email', data);
+    const response: AxiosResponse = await axiosAuthInstance.post('/resend-email', data);
+    return response;
+  }
+
+  async verifyEmail(token: string): Promise<AxiosResponse> {
+    const response: AxiosResponse = await axiosAuthInstance.put('/verify-email', { token });
     return response;
   }
 
   async getGigs(query: string, from: string, size: string, type: string): Promise<AxiosResponse> {
-    const response: AxiosResponse = await this.axiosService.axios.get(`/search/gig/${from}/${size}/${type}?${query}`);
+    const response: AxiosResponse = await axiosAuthInstance.get(`/search/gig/${from}/${size}/${type}?${query}`);
     return response;
   }
 
   async getGig(gigId: string): Promise<AxiosResponse> {
-    const response: AxiosResponse = await this.axiosService.axios.get(`/search/gig/${gigId}`);
+    const response: AxiosResponse = await axiosAuthInstance.get(`/search/gig/${gigId}`);
     return response;
   }
 
   async seed(count: string): Promise<AxiosResponse> {
-    const response: AxiosResponse = await this.axiosService.axios.put(`/seed/${count}`);
+    const response: AxiosResponse = await axiosAuthInstance.put(`/seed/${count}`);
     return response;
   }
 }
