@@ -11,7 +11,7 @@ export class CurrentUser {
       res.status(StatusCodes.OK).json({ message: response.data.message, user: response.data.user });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      next(new BadRequestError(err.response.data.message, 'Password forgotPassword() method'));
+      next(new BadRequestError(err.response.data.message, 'CurrentUser read() method'));
     }
   }
 
@@ -24,7 +24,7 @@ export class CurrentUser {
       res.status(StatusCodes.OK).json({ message: response.data.message, user: response.data.user });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      next(new BadRequestError(err.response.data.message, 'Password forgotPassword() method'));
+      next(new BadRequestError(err.response.data.message, 'CurrentUser resendEmail() method'));
     }
   }
 }

@@ -1,4 +1,5 @@
 import { buyerService } from '@gateway/services/api/buyer.service';
+import { BadRequestError } from '@quysterben/jobber-shared';
 import { AxiosResponse } from 'axios';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -11,8 +12,9 @@ export class Get {
         message: response.data.message,
         buyer: response.data.buyer
       });
-    } catch (error) {
-      next(error);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      next(new BadRequestError(err.response.data.message, 'Buyer Get email() method'));
     }
   }
 
@@ -23,8 +25,9 @@ export class Get {
         message: response.data.message,
         buyer: response.data.buyer
       });
-    } catch (error) {
-      next(error);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      next(new BadRequestError(err.response.data.message, 'Buyer Get currentUsername() method'));
     }
   }
 
@@ -35,8 +38,9 @@ export class Get {
         message: response.data.message,
         buyer: response.data.buyer
       });
-    } catch (error) {
-      next(error);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      next(new BadRequestError(err.response.data.message, 'Buyer Get username() method'));
     }
   }
 }
